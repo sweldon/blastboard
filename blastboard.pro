@@ -1,13 +1,15 @@
 TEMPLATE = app
 TARGET = blastboard
 
-QT = core gui
+QT += core gui sql
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 SOURCES += \
     main.cpp \
-    window.cpp
+    login.cpp
 
 HEADERS += \
-    window.h
+    login.h
+
+RESOURCES     = resources.qrc
