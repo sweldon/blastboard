@@ -9,16 +9,19 @@
 #include <QPaintEvent>
 #include <QPainter>
 #include <QPalette>
+#include <QMessageBox>
 
 Login::Login(QWidget *parent) : QWidget(parent){
 
-    sqldb = new QSqlDatabase;
-    sqldb->addDatabase("QMYSQL");
-    sqldb->setDatabaseName("blastboard");
-    sqldb->setHostName("localhost");
-    sqldb->setUserName("root");
-    sqldb->setPassword("password");
-    bool ok = sqldb->isOpen();
+    if(!connOpen()){
+
+        connection_error = new QLabel("Error: Can't connect to Blastboard servers", this);
+        connection_error->setGeometry(0, 0, 350, 25);
+        connection_error->setStyleSheet("background-color:#cc0000; text-align:center;");
+        connection_error->setAlignment(Qt::AlignCenter);
+
+
+    }
 
     setFixedSize(350, 400);
 
@@ -44,11 +47,6 @@ Login::Login(QWidget *parent) : QWidget(parent){
 
     QObject::connect(submit_login, SIGNAL(clicked(bool)), this, SLOT(on_login_clicked()));
 
-    if(!ok){
-        qDebug() << "Failed to open db connection!";
-        return;
-    }
-
 }
 
 void Login::on_login_clicked(){
@@ -60,20 +58,25 @@ void Login::on_login_clicked(){
 
     QSqlQuery login_query;
 
+
     if(login_query.exec("select * from users where username = '"+username+"' and password = '"+password+"'")){
 
-            int executions;
+            int executions = 0;
             while(login_query.next()){
                 executions++;
             }
 
             if(executions == 1){
-                submit_login->setText("Login success.");
+                this->hide();
+                Home *home = new Home();
+                home->show();
+
             }
-            else if(executions > 1){
-                submit_login->setText("Duplicate username and password.");
+            if(executions > 1){
+                // this case makes no sense. get rid of it later.
+                submit_login->setText("Duplicate...");
             }
-            else if(executions < 1){
+            if(executions < 1){
                 submit_login->setText("You've entered the wrong shit.");
             }
 

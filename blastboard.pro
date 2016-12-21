@@ -7,9 +7,11 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 SOURCES += \
     main.cpp \
-    login.cpp
+    login.cpp \
+    home.cpp
 
 HEADERS += \
-    login.h
+    login.h \
+    home.h
 
 RESOURCES     = resources.qrc
