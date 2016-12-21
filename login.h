@@ -55,7 +55,7 @@ private slots:
 private:
     QLineEdit *user_field;
     QLineEdit *pass_field;
-    QDialogButtonBox *submit_login;
+    QPushButton *submit_login;
     bool *ok;
     QLabel *connection_error;
 
