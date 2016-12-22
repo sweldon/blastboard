@@ -47,6 +47,8 @@ Login::Login(QWidget *parent) : QWidget(parent){
 
     QObject::connect(submit_login, SIGNAL(clicked(bool)), this, SLOT(on_login_clicked()));
 
+    this->setWindowTitle("Blastboard - Login");
+
 }
 
 void Login::on_login_clicked(){
@@ -68,8 +70,8 @@ void Login::on_login_clicked(){
 
             if(executions == 1){
                 this->hide();
-                Home *home = new Home();
-                home->show();
+                Dashboard *dashboard = new Dashboard();
+                dashboard->show();
 
             }
             if(executions > 1){

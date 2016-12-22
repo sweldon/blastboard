@@ -1,5 +1,6 @@
 <RCC>
     <qresource prefix="/assets">
         <file>blast_3.png</file>
+        <file>avatar_sample.png</file>
     </qresource>
 </RCC>

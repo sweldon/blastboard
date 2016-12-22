@@ -7,7 +7,7 @@
 #include <QFileInfo>
 #include <QWidget>
 #include <QSqlDatabase>
-#include "home.h"
+#include "dashboard.h"
 #include <QLabel>
 
 
