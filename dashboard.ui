@@ -2,6 +2,9 @@
 <ui version="4.0">
  <class>Dashboard</class>
  <widget class="QMainWindow" name="Dashboard">
+  <property name="windowModality">
+   <enum>Qt::NonModal</enum>
+  </property>
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -446,14 +449,17 @@
   <property name="styleSheet">
    <string notr="true">QGraphicsEllipseItem{background-color:red;}</string>
   </property>
+  <property name="tabShape">
+   <enum>QTabWidget::Rounded</enum>
+  </property>
   <widget class="QWidget" name="centralwidget">
    <widget class="QGroupBox" name="groupBox">
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>10</y>
-      <width>311</width>
-      <height>691</height>
+      <y>11</y>
+      <width>318</width>
+      <height>690</height>
      </rect>
     </property>
     <property name="palette">
@@ -561,11 +567,14 @@
     <widget class="QComboBox" name="comboBox">
      <property name="geometry">
       <rect>
-       <x>202</x>
-       <y>46</y>
+       <x>212</x>
+       <y>47</y>
        <width>101</width>
        <height>31</height>
       </rect>
+     </property>
+     <property name="cursor">
+      <cursorShape>PointingHandCursor</cursorShape>
      </property>
      <property name="maxVisibleItems">
       <number>5</number>
@@ -577,12 +586,17 @@
      </item>
      <item>
       <property name="text">
-       <string>Later</string>
+       <string>Let's Blast</string>
       </property>
      </item>
      <item>
       <property name="text">
-       <string>Let's Blast</string>
+       <string>Hold on...</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Later</string>
       </property>
      </item>
     </widget>
@@ -626,8 +640,11 @@
        <height>21</height>
       </rect>
      </property>
+     <property name="styleSheet">
+      <string notr="true">QProgressBar{ border: 2px solid grey;border-radius: 5px;text-align: center}QProgressBar::chunk {background-color: red;width: 10px;margin: 1px;}</string>
+     </property>
      <property name="value">
-      <number>5</number>
+      <number>0</number>
      </property>
     </widget>
     <widget class="Line" name="line">
@@ -635,7 +652,7 @@
       <rect>
        <x>10</x>
        <y>140</y>
-       <width>291</width>
+       <width>299</width>
        <height>16</height>
       </rect>
      </property>
@@ -645,9 +662,9 @@
         <colorrole role="WindowText">
          <brush brushstyle="SolidPattern">
           <color alpha="255">
-           <red>255</red>
-           <green>255</green>
-           <blue>255</blue>
+           <red>105</red>
+           <green>150</green>
+           <blue>173</blue>
           </color>
          </brush>
         </colorrole>
@@ -699,9 +716,9 @@
         <colorrole role="Text">
          <brush brushstyle="SolidPattern">
           <color alpha="255">
-           <red>255</red>
-           <green>255</green>
-           <blue>255</blue>
+           <red>105</red>
+           <green>150</green>
+           <blue>173</blue>
           </color>
          </brush>
         </colorrole>
@@ -717,9 +734,9 @@
         <colorrole role="ButtonText">
          <brush brushstyle="SolidPattern">
           <color alpha="255">
-           <red>255</red>
-           <green>255</green>
-           <blue>255</blue>
+           <red>105</red>
+           <green>150</green>
+           <blue>173</blue>
           </color>
          </brush>
         </colorrole>
@@ -782,9 +799,9 @@
         <colorrole role="WindowText">
          <brush brushstyle="SolidPattern">
           <color alpha="255">
-           <red>255</red>
-           <green>255</green>
-           <blue>255</blue>
+           <red>105</red>
+           <green>150</green>
+           <blue>173</blue>
           </color>
          </brush>
         </colorrole>
@@ -836,9 +853,9 @@
         <colorrole role="Text">
          <brush brushstyle="SolidPattern">
           <color alpha="255">
-           <red>255</red>
-           <green>255</green>
-           <blue>255</blue>
+           <red>105</red>
+           <green>150</green>
+           <blue>173</blue>
           </color>
          </brush>
         </colorrole>
@@ -854,9 +871,9 @@
         <colorrole role="ButtonText">
          <brush brushstyle="SolidPattern">
           <color alpha="255">
-           <red>255</red>
-           <green>255</green>
-           <blue>255</blue>
+           <red>105</red>
+           <green>150</green>
+           <blue>173</blue>
           </color>
          </brush>
         </colorrole>
@@ -918,10 +935,10 @@
        <disabled>
         <colorrole role="WindowText">
          <brush brushstyle="SolidPattern">
-          <color alpha="128">
-           <red>31</red>
-           <green>31</green>
-           <blue>31</blue>
+          <color alpha="255">
+           <red>105</red>
+           <green>150</green>
+           <blue>173</blue>
           </color>
          </brush>
         </colorrole>
@@ -972,10 +989,10 @@
         </colorrole>
         <colorrole role="Text">
          <brush brushstyle="SolidPattern">
-          <color alpha="128">
-           <red>31</red>
-           <green>31</green>
-           <blue>31</blue>
+          <color alpha="255">
+           <red>105</red>
+           <green>150</green>
+           <blue>173</blue>
           </color>
          </brush>
         </colorrole>
@@ -990,10 +1007,10 @@
         </colorrole>
         <colorrole role="ButtonText">
          <brush brushstyle="SolidPattern">
-          <color alpha="128">
-           <red>31</red>
-           <green>31</green>
-           <blue>31</blue>
+          <color alpha="255">
+           <red>105</red>
+           <green>150</green>
+           <blue>173</blue>
           </color>
          </brush>
         </colorrole>
@@ -1058,13 +1075,119 @@
       <enum>Qt::Horizontal</enum>
      </property>
     </widget>
+    <widget class="QLabel" name="user_label">
+     <property name="geometry">
+      <rect>
+       <x>105</x>
+       <y>84</y>
+       <width>201</width>
+       <height>47</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>36</pointsize>
+      </font>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">background: linear-gradient(to right, rgba(255,255,255,0) 30%,rgba(255,255,255,1) 100%);</string>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+    </widget>
+    <widget class="QListWidget" name="listWidget">
+     <property name="enabled">
+      <bool>true</bool>
+     </property>
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>158</y>
+       <width>200</width>
+       <height>520</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>24</pointsize>
+      </font>
+     </property>
+     <property name="cursor" stdset="0">
+      <cursorShape>ArrowCursor</cursorShape>
+     </property>
+     <property name="focusPolicy">
+      <enum>Qt::NoFocus</enum>
+     </property>
+     <property name="styleSheet">
+      <string notr="true"> QListWidget{background-color:#353636;border:none;}QListWidget::item:hover{color:#87abbd;}QListWidget::item{ border-bottom: 6px solid #353636;}</string>
+     </property>
+     <property name="autoScroll">
+      <bool>false</bool>
+     </property>
+     <property name="showDropIndicator" stdset="0">
+      <bool>false</bool>
+     </property>
+     <property name="alternatingRowColors">
+      <bool>false</bool>
+     </property>
+     <property name="selectionMode">
+      <enum>QAbstractItemView::NoSelection</enum>
+     </property>
+     <property name="iconSize">
+      <size>
+       <width>40</width>
+       <height>40</height>
+      </size>
+     </property>
+     <property name="viewMode">
+      <enum>QListView::ListMode</enum>
+     </property>
+    </widget>
+    <widget class="QListWidget" name="statusList">
+     <property name="geometry">
+      <rect>
+       <x>210</x>
+       <y>157</y>
+       <width>100</width>
+       <height>520</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>18</pointsize>
+       <italic>true</italic>
+      </font>
+     </property>
+     <property name="focusPolicy">
+      <enum>Qt::NoFocus</enum>
+     </property>
+     <property name="styleSheet">
+      <string notr="true"> QListWidget{background-color:#353636;border:none;}QListWidget::item{ border-top: 13px solid #353636;color:#A8A8A8;}</string>
+     </property>
+     <property name="autoScroll">
+      <bool>false</bool>
+     </property>
+     <property name="showDropIndicator" stdset="0">
+      <bool>false</bool>
+     </property>
+     <property name="selectionMode">
+      <enum>QAbstractItemView::NoSelection</enum>
+     </property>
+     <property name="iconSize">
+      <size>
+       <width>40</width>
+       <height>40</height>
+      </size>
+     </property>
+    </widget>
    </widget>
    <widget class="QGroupBox" name="groupBox_2">
     <property name="geometry">
      <rect>
-      <x>942</x>
+      <x>906</x>
       <y>9</y>
-      <width>296</width>
+      <width>332</width>
       <height>172</height>
      </rect>
     </property>
@@ -1169,6 +1292,27 @@
     </property>
     <property name="title">
      <string>Videoball</string>
+    </property>
+   </widget>
+   <widget class="QGroupBox" name="groupBox_3">
+    <property name="geometry">
+     <rect>
+      <x>907</x>
+      <y>180</y>
+      <width>330</width>
+      <height>520</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>25</pointsize>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">color:#6996AD</string>
+    </property>
+    <property name="title">
+     <string>Chat</string>
     </property>
    </widget>
   </widget>

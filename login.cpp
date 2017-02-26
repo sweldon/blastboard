@@ -11,6 +11,7 @@
 #include <QPalette>
 #include <QMessageBox>
 
+
 Login::Login(QWidget *parent) : QWidget(parent){
 
     if(!connOpen()){
@@ -70,7 +71,7 @@ void Login::on_login_clicked(){
 
             if(executions == 1){
                 this->hide();
-                Dashboard *dashboard = new Dashboard();
+                Dashboard *dashboard = new Dashboard(NULL, username);
                 dashboard->show();
 
             }
