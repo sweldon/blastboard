@@ -7,6 +7,16 @@
 #include <QDebug>
 #include "login.h"
 #include <QtSql>
+#include <iostream>
+#include <string>
+#include <gloox/client.h>
+#include <gloox/message.h>
+#include <gloox/messagehandler.h>
+#include <gloox/connectionlistener.h>
+
+
+using namespace std;
+using namespace gloox;
 
 
 Dashboard::Dashboard(QWidget *parent, QString username) :

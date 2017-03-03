@@ -11,7 +11,6 @@
 #include <QPalette>
 #include <QMessageBox>
 
-
 Login::Login(QWidget *parent) : QWidget(parent){
 
     if(!connOpen()){

@@ -10,7 +10,6 @@
 #include "dashboard.h"
 #include <QLabel>
 
-
 class QPushButton;
 class QLineEdit;
 

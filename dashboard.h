@@ -7,6 +7,7 @@
 #include <QTableWidget>
 #include <QLabel>
 #include <QSqlDatabase>
+#include <QDebug>
 
 
 namespace Ui {
