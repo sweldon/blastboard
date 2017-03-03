@@ -45,13 +45,13 @@ ostream& operator<<(ostream& os, const Message& stanza) {
 class ConnListener : public ConnectionListener {
 public:
     virtual void onConnect() {
-        cout << "ConnListener::onConnect()" << endl;
+        cout << "Connected!" << endl;
     }
     virtual void onDisconnect(ConnectionError e) {
-        cout << "ConnListener::onDisconnect() " << e << endl;
+        cout << "Disconnected. " << e << endl;
     }
     virtual bool onTLSConnect(const CertInfo& info) {
-        cout << "ConnListener::onTLSConnect()" << endl;
+        cout << "Connection is secure." << endl;
         return true;
     }
 };
@@ -59,8 +59,8 @@ public:
 class Bot : public MessageHandler {
 public:
     Bot() {
-        JID jid("bot@localhost");
-        client = new Client( jid, "botpwd" );
+        JID jid("bot@earthworkx.com");
+        client = new Client( jid, "botpw" );
         connListener = new ConnListener();
         client->registerMessageHandler( this );
         client->registerConnectionListener(connListener);
@@ -72,10 +72,14 @@ public:
         delete connListener;
     }
 
-    virtual void handleMessage( const Message& stanza, MessageSession* session = 0 ) {
-        cout << "Received message: " << stanza << endl;
-        Message msg(Message::Chat, stanza.from(), "Tell me more about " + stanza.body() );
-        client->send( msg );
+    virtual void handleMessage( const Message& stanza, MessageSession* session) {
+        if(stanza.body() != ""){
+            cout << stanza.from().username() << ": " << stanza.body() << endl;
+//            Message msg(Message::Chat, stanza.from(), "Tell me more about " + stanza.body() );
+            Message msg(Message::Chat, stanza.from(), "I received your message!" );
+            client->send( msg );
+        }
+
     }
 
 private:
@@ -83,6 +87,6 @@ private:
    ConnListener* connListener;
 };
 
-int main() {
-    Bot b;
-}
+//int main() {
+//    Bot b;
+//}
