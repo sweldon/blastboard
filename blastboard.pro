@@ -16,7 +16,8 @@ SOURCES += \
 
 HEADERS += \
     login.h \
-    dashboard.h
+    dashboard.h \
+    bot.h
 
 RESOURCES     = resources.qrc
 

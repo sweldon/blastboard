@@ -14,11 +14,6 @@
 #include <gloox/messagehandler.h>
 #include <gloox/connectionlistener.h>
 
-
-using namespace std;
-using namespace gloox;
-
-
 Dashboard::Dashboard(QWidget *parent, QString username) :
     QMainWindow(parent),
     ui(new Ui::Dashboard)

@@ -10,6 +10,7 @@
 #include <QPainter>
 #include <QPalette>
 #include <QMessageBox>
+#include <bot.h>
 
 Login::Login(QWidget *parent) : QWidget(parent){
 
@@ -70,9 +71,9 @@ void Login::on_login_clicked(){
 
             if(executions == 1){
                 this->hide();
-                Dashboard *dashboard = new Dashboard(NULL, username);
-                dashboard->show();
-
+//                Dashboard *dashboard = new Dashboard(NULL, username);
+//                dashboard->show();
+                Bot *b = new Bot();
             }
             if(executions > 1){
                 // this case makes no sense. get rid of it later.
