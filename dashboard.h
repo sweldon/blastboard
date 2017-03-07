@@ -136,6 +136,7 @@ private:
 
 private slots:
     void blast_selected(QString username);
+    void sendMessage();
 
 
 };

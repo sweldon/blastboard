@@ -1320,11 +1320,40 @@
        <x>7</x>
        <y>42</y>
        <width>319</width>
-       <height>430</height>
+       <height>402</height>
       </rect>
      </property>
      <property name="styleSheet">
-      <string notr="true"/>
+      <string notr="true">background-color:#2f3030;border:none;</string>
+     </property>
+    </widget>
+    <widget class="QTextEdit" name="messageDraft">
+     <property name="geometry">
+      <rect>
+       <x>8</x>
+       <y>447</y>
+       <width>254</width>
+       <height>62</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">background-color:#2f3030;border:none;</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="sendMsgBtn">
+     <property name="geometry">
+      <rect>
+       <x>264</x>
+       <y>446</y>
+       <width>59</width>
+       <height>62</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">background-color:#494a4a;border:none;</string>
+     </property>
+     <property name="text">
+      <string>Send</string>
      </property>
     </widget>
    </widget>

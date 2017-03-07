@@ -6,6 +6,7 @@
 #include <QGraphicsEllipseItem>
 #include <QDebug>
 #include <QtSql>
+#include <gloox/messagehandler.h>
 
 Dashboard::Dashboard(QWidget *parent, QString un, QString pw) :
     QMainWindow(parent),
@@ -18,6 +19,8 @@ Dashboard::Dashboard(QWidget *parent, QString un, QString pw) :
 
     ui->setupUi(this);
     this->setFixedSize(QSize(1250, 750));
+
+    ui->chatDialog->setText("<p><i>-You have entered the blastboard chat</i></p>");
 
     scene = new QGraphicsScene(this);
 
@@ -65,8 +68,10 @@ Dashboard::Dashboard(QWidget *parent, QString un, QString pw) :
     m_sigmapper->setMapping(ui->comboBox, un);
 
     connect(m_sigmapper, SIGNAL(mapped(QString)), this, SLOT(blast_selected(const QString&)));
-
+    connect(ui->sendMsgBtn, SIGNAL(clicked(bool)), this, SLOT(sendMessage()));
     // QObject::connect(ui->comboBox, SIGNAL(activated(int)), this, SLOT(blast_selected(username)));
+
+    connect(ui->sendMsgBtn, SIGNAL(returnPressed()),this,SIGNAL(clicked()));
 
 
 }
@@ -75,6 +80,22 @@ Dashboard::~Dashboard()
 {
     recvThread->stop();
     delete ui;
+}
+
+void Dashboard::sendMessage(){
+    QString msg = ui->messageDraft->toPlainText().trimmed();
+    if(msg!=""){
+        string ptmsg = msg.toUtf8().constData();
+        Message msg_back(Message::Chat,gloox::JID("admin@earthworkx.com"), ptmsg);
+        client->send( msg_back );
+        QString username = QString::fromStdString(jid.username());
+        ui->chatDialog->append("<b>"+username+"</b>: "+msg);
+        ui->messageDraft->clear();
+    }
+    else{
+        ui->messageDraft->clear();
+    }
+
 }
 
 void Dashboard::blast_selected(QString username){
@@ -242,9 +263,8 @@ void Dashboard::onDisconnect(ConnectionError e)
 void Dashboard::handleMessage( const Message& stanza, MessageSession* session = 0 ) {
     if(stanza.body() != ""){
         QString msg = QString::fromStdString(stanza.body());
-        ui->chatDialog->append(msg);
-    Message msg_back(Message::Chat, stanza.from(), "I received your message!" );
-    client->send( msg_back );
+        QString sender = QString::fromStdString(stanza.from().username());
+        ui->chatDialog->append("<b>"+sender+"</b>: "+msg);
     }
 }
 
