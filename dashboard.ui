@@ -1314,6 +1314,19 @@
     <property name="title">
      <string>Chat</string>
     </property>
+    <widget class="QTextBrowser" name="chatDialog">
+     <property name="geometry">
+      <rect>
+       <x>7</x>
+       <y>42</y>
+       <width>319</width>
+       <height>430</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true"/>
+     </property>
+    </widget>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">

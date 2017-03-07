@@ -1,30 +1,13 @@
 #include <QApplication>
 #include "login.h"
-#include <QProgressBar>
-#include <QSlider>
-#include <QPushButton>
-#include <QLineEdit>
-#include <QtSql>
-#include <dashboard.h>
-
-// /Users/weldos01/build-blastboard-Desktop_Qt_5_7_1_clang_64bit-Release
 
 int main(int argc, char **argv)
 {
-    QApplication app (argc, argv);
+    QApplication a(argc, argv);
+    Login w;
+    w.show();
 
-         Login login_window;
-
-         login_window.show();
-
-
-        // temporary for main screen development
-//        Dashboard home;
-
-//        home.show();
-
-
-    return app.exec();
+    return a.exec();
 }
 
 

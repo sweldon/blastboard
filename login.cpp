@@ -1,16 +1,10 @@
 #include "login.h"
 #include <QPushButton>
-#include <QApplication>
-#include <QProgressBar>
-#include <QSlider>
 #include <QLineEdit>
-#include <QtSql>
-#include <QSqlDatabase>
 #include <QPaintEvent>
 #include <QPainter>
 #include <QPalette>
 #include <QMessageBox>
-#include <bot.h>
 
 Login::Login(QWidget *parent) : QWidget(parent){
 
@@ -20,7 +14,6 @@ Login::Login(QWidget *parent) : QWidget(parent){
         connection_error->setGeometry(0, 0, 350, 25);
         connection_error->setStyleSheet("background-color:#cc0000; text-align:center;");
         connection_error->setAlignment(Qt::AlignCenter);
-
 
     }
 
@@ -71,9 +64,8 @@ void Login::on_login_clicked(){
 
             if(executions == 1){
                 this->hide();
-//                Dashboard *dashboard = new Dashboard(NULL, username);
-//                dashboard->show();
-                Bot *b = new Bot();
+                Dashboard *dashboard = new Dashboard(NULL, username, password);
+                dashboard->show();
             }
             if(executions > 1){
                 // this case makes no sense. get rid of it later.

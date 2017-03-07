@@ -5,22 +5,16 @@
 #include <QLabel>
 #include <QGraphicsEllipseItem>
 #include <QDebug>
-#include "login.h"
 #include <QtSql>
-#include <iostream>
-#include <string>
-#include <gloox/client.h>
-#include <gloox/message.h>
-#include <gloox/messagehandler.h>
-#include <gloox/connectionlistener.h>
 
-Dashboard::Dashboard(QWidget *parent, QString username) :
+Dashboard::Dashboard(QWidget *parent, QString un, QString pw) :
     QMainWindow(parent),
     ui(new Ui::Dashboard)
 {
 
+    std::string username = un.toUtf8().constData();
+    std::string password = pw.toUtf8().constData();
 
-    QString user = username;
 
     ui->setupUi(this);
     this->setFixedSize(QSize(1250, 750));
@@ -30,12 +24,24 @@ Dashboard::Dashboard(QWidget *parent, QString username) :
     ui->graphicsView->setScene(scene);
     ui->graphicsView->setRenderHints(QPainter::Antialiasing);
     ui->graphicsView->setStyleSheet("background: transparent");
-    ui->user_label->setText(user);
+    ui->user_label->setText(un);
+    jid = JID(username+"@earthworkx.com");
+    client = new Client(jid, password);
+    client->registerConnectionListener(this);
+    client->logInstance().registerLogHandler(LogLevelDebug, LogAreaAll, this);
+    client->rosterManager()->registerRosterListener(this);
+    client->registerMessageHandler(this);
+    client->setSasl(true);
+    recvThread = new RecvThread(client);
+    recvThread->start();
+    client->connect(false);
+
+    vcardManager = new VCardManager(client);
 
     QSqlQuery update_blaster;
-    update_blaster.exec("UPDATE users SET blaster = FALSE WHERE username='"+user+"'");
+    update_blaster.exec("UPDATE users SET blaster = FALSE WHERE username='"+un+"'");
 
-//    avatar = new QGraphicsEllipseItem(10,10,80,80);
+    //avatar = new QGraphicsEllipseItem(10,10,80,80);
 
 
     QPixmap m(":/assets/avatar_sample.png");
@@ -48,7 +54,6 @@ Dashboard::Dashboard(QWidget *parent, QString username) :
 
     avatar = scene->addEllipse(0,0,avatarW,avatarH, pen, QBrush(m.scaled(avatarW,avatarH,Qt::IgnoreAspectRatio,Qt::SmoothTransformation)));
 
-
     if(ui->progressBar->value() == 0) {
         ui->progressBar->setFormat("No blasters");
     }
@@ -56,19 +61,19 @@ Dashboard::Dashboard(QWidget *parent, QString username) :
 
     QSignalMapper* m_sigmapper = new QSignalMapper(this);
 
-    // #2
     connect(ui->comboBox, SIGNAL(activated(int)), m_sigmapper, SLOT(map()));
-    m_sigmapper->setMapping(ui->comboBox, user);
+    m_sigmapper->setMapping(ui->comboBox, un);
 
     connect(m_sigmapper, SIGNAL(mapped(QString)), this, SLOT(blast_selected(const QString&)));
 
-//    QObject::connect(ui->comboBox, SIGNAL(activated(int)), this, SLOT(blast_selected(username)));
+    // QObject::connect(ui->comboBox, SIGNAL(activated(int)), this, SLOT(blast_selected(username)));
 
 
 }
 
 Dashboard::~Dashboard()
 {
+    recvThread->stop();
     delete ui;
 }
 
@@ -219,4 +224,123 @@ void Dashboard::blast_selected(QString username){
     }
 
 
+}
+
+void Dashboard::onConnect()
+{
+//    ui->statusBar->showMessage("Logged in");
+    qDebug() << "ConnListener::onConnect()" << endl;
+    vcardManager->fetchVCard(jid.bare(), this);
+}
+
+void Dashboard::onDisconnect(ConnectionError e)
+{
+//    ui->statusBar->showMessage("Disconnected "+QString::number(e));
+    qDebug() << "ConnListener::onDisconnect() " << e <<" "<<ConnNoSupportedAuth << endl;
+}
+
+void Dashboard::handleMessage( const Message& stanza, MessageSession* session = 0 ) {
+    if(stanza.body() != ""){
+        QString msg = QString::fromStdString(stanza.body());
+        ui->chatDialog->append(msg);
+    Message msg_back(Message::Chat, stanza.from(), "I received your message!" );
+    client->send( msg_back );
+    }
+}
+
+void Dashboard::handleLog(LogLevel level, LogArea area, const string &message)
+{
+    qDebug()<< "log: level: "<<level<<", area: "<<area<<", "<<message.c_str();
+
+}
+
+void Dashboard::handleVCard(const JID &jid, const VCard *v)
+{
+
+    qDebug()<<"Received a vcard"<<endl;
+    if( !v )
+    {
+        qDebug()<<"empty vcard!"<<endl;
+        return;
+    }
+
+//    VCard* vcard = new VCard( *v );
+//    string fn = vcard->formattedname();
+//    qDebug()<<fn.c_str()<<endl;
+//    VCard::Photo photo = vcard->photo();
+//    ui->nameLabel->setText(QString(fn.c_str()));
+//    string p = photo.binval;
+//    for (int i=0; i<10; i++) cout<<(int) p[i]<<" "; cout<<endl;
+//    QByteArray imageData(p.c_str(), p.size());
+//    QImage image;
+//    qDebug()<<image.loadFromData(imageData, "PNG");
+//    qDebug()<<image.save("/home/dipal/a.png", "PNG");
+//    ui->imageLabel->setPixmap(QPixmap::fromImage(image));
+//    ui->imageLabel->show();
+}
+
+void Dashboard::handleVCardResult(VCardHandler::VCardContext context, const JID &jid, StanzaError se)
+{
+
+}
+
+void Dashboard::insertFriend(QString friendJid)
+{
+//    model->insertRow(model->rowCount());
+//    QModelIndex index = model->index(model->rowCount()-1);
+//    model->setData(index, friendJid);
+}
+
+
+void Dashboard::handleItemAdded(const JID &jid)
+{
+}
+
+void Dashboard::handleItemSubscribed(const JID &jid)
+{
+}
+
+void Dashboard::handleItemRemoved(const JID &jid)
+{
+}
+
+void Dashboard::handleItemUpdated(const JID &jid)
+{
+}
+
+void Dashboard::handleItemUnsubscribed(const JID &jid)
+{
+}
+
+void Dashboard::handleRoster(const Roster &roster)
+{
+    Roster::const_iterator it = roster.begin();
+    for( ; it != roster.end(); ++it )
+    {
+        insertFriend((*it).second->jidJID().full().c_str());
+    }
+}
+
+void Dashboard::handleRosterPresence(const RosterItem &item, const string &resource, Presence::PresenceType presence, const string &msg)
+{
+}
+
+void Dashboard::handleSelfPresence(const RosterItem &item, const string &resource, Presence::PresenceType presence, const string &msg)
+{
+}
+
+bool Dashboard::handleSubscriptionRequest(const JID &jid, const string &msg)
+{
+}
+
+bool Dashboard::handleUnsubscriptionRequest(const JID &jid, const string &msg)
+{
+}
+
+void Dashboard::handleNonrosterPresence(const Presence &presence)
+{
+}
+
+void Dashboard::handleRosterError(const IQ &iq)
+{
 }

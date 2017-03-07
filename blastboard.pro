@@ -8,16 +8,16 @@ CONFIG += c++11
 CONFIG += console
 CONFIG -= app_bundle
 
+QMAKE_CXXFLAGS += -std=c++11
+
 SOURCES += \
     main.cpp \
     login.cpp \
-    dashboard.cpp \
-    bot.cpp
+    dashboard.cpp
 
 HEADERS += \
     login.h \
-    dashboard.h \
-    bot.h
+    dashboard.h
 
 RESOURCES     = resources.qrc
 
