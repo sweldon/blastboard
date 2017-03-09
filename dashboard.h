@@ -71,24 +71,24 @@ private:
 };
 
 
-class GroupChat : public MUCRoomHandler{
+//class GroupChat : public MUCRoomHandler{
 
-private:
-
-
-    virtual void handleMUCParticipantPresence(MUCRoom *room, const MUCRoomParticipant participant, const Presence &presence);
-    virtual void handleMUCMessage(MUCRoom *room, const Message &msg, bool priv);
-    virtual bool handleMUCRoomCreation(MUCRoom *room);
-    virtual void handleMUCSubject(MUCRoom *room, const std::string &nick, const std::string &subject);
-    virtual void handleMUCInviteDecline(MUCRoom *room, const JID &invitee, const std::string &reason);
-    virtual void handleMUCError(MUCRoom *room, StanzaError error);
-    virtual void handleMUCInfo(MUCRoom *room, int features, const std::string &name, const DataForm *infoForm);
-    virtual void handleMUCItems(MUCRoom *room, const Disco::ItemList &items);
+//private:
 
 
-};
+//    virtual void handleMUCParticipantPresence(MUCRoom *room, const MUCRoomParticipant participant, const Presence &presence);
+//    virtual void handleMUCMessage(MUCRoom *room, const Message &msg, bool priv);
+//    virtual bool handleMUCRoomCreation(MUCRoom *room);
+//    virtual void handleMUCSubject(MUCRoom *room, const std::string &nick, const std::string &subject);
+//    virtual void handleMUCInviteDecline(MUCRoom *room, const JID &invitee, const std::string &reason);
+//    virtual void handleMUCError(MUCRoom *room, StanzaError error);
+//    virtual void handleMUCInfo(MUCRoom *room, int features, const std::string &name, const DataForm *infoForm);
+//    virtual void handleMUCItems(MUCRoom *room, const Disco::ItemList &items);
 
-class Dashboard : public QMainWindow, public ConnectionListener, public VCardHandler, public LogHandler, public RosterListener, public MessageHandler
+
+//};
+
+class Dashboard : public QMainWindow, ConnectionListener, VCardHandler, LogHandler, RosterListener, MessageHandler, MUCRoomHandler
 {
     Q_OBJECT
 
@@ -121,7 +121,7 @@ public:
         return ok;
     }
 
-    MUCRoom* room;
+
     void handleItemAdded(const JID &jid);
     void handleItemSubscribed(const JID &jid);
     void handleItemRemoved(const JID &jid);
@@ -143,6 +143,7 @@ private:
     QTableWidget *vTable;
     QLabel *connection_error;
 
+
     virtual void onConnect();
     virtual void onDisconnect(ConnectionError e);
     virtual bool onTLSConnect(const CertInfo& info) {
@@ -156,20 +157,33 @@ private:
     virtual void handleMessage( const Message& stanza, MessageSession* session);
 
     void insertFriend(QString friendJid);
+
+
+    virtual void handleMUCParticipantPresence(MUCRoom *room, const MUCRoomParticipant participant, const Presence &presence);
+    virtual void handleMUCMessage(MUCRoom *room, const Message &msg, bool priv);
+    virtual bool handleMUCRoomCreation(MUCRoom *room);
+    virtual void handleMUCSubject(MUCRoom *room, const std::string &nick, const std::string &subject);
+    virtual void handleMUCInviteDecline(MUCRoom *room, const JID &invitee, const std::string &reason);
+    virtual void handleMUCError(MUCRoom *room, StanzaError error);
+    virtual void handleMUCInfo(MUCRoom *room, int features, const std::string &name, const DataForm *infoForm);
+    virtual void handleMUCItems(MUCRoom *room, const Disco::ItemList &items);
+
     JID jid;
     Client* client;
     RecvThread *recvThread;
     VCardManager *vcardManager;
+    MUCRoom* m_room;
 
     // Group chat
 
-    void joinRoom( const std::string& room, const std::string& service, const std::string& nick );
+//    void joinRoom( const std::string& room, const std::string& service, const std::string& nick );
 
 
 
 private slots:
     void blast_selected(QString username);
-    void sendMessage();
+    void sendPrivateMessage();
+    void sendBlastMessage();
 //    void joinRoom( const std::string& room, const std::string& service, const std::string& nick );
 
 

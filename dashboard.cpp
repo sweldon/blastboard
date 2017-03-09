@@ -28,26 +28,24 @@ Dashboard::Dashboard(QWidget *parent, QString un, QString pw) :
     ui->graphicsView->setRenderHints(QPainter::Antialiasing);
     ui->graphicsView->setStyleSheet("background: transparent");
     ui->user_label->setText(un);
-    jid = JID(username+"@earthworkx.com");
-    client = new Client(jid, password);
-    client->registerConnectionListener(this);
-    client->logInstance().registerLogHandler(LogLevelDebug, LogAreaAll, this);
-    client->rosterManager()->registerRosterListener(this);
-    client->registerMessageHandler(this);
-    client->setSasl(true);
+    JID jid( username + "@earthworkx.com" );
+    client = new Client( jid, password);
+    client->registerConnectionListener( this );
+    client->setPresence( Presence::Available, -1 );
+    client->disco()->setVersion( "gloox muc_example", GLOOX_VERSION, "Linux" );
+    client->disco()->setIdentity( "client", "bot" );
+    client->setCompression( false );
+    StringList ca;
+    ca.push_back( "/path/to/cacert.crt" );
+    client->setCACerts( ca );
+
+    client->logInstance().registerLogHandler( LogLevelDebug, LogAreaAll, this );
+
+    JID nick( "blastchat@conference.earthworkx.com/"+username );
+    m_room = new MUCRoom( client, nick, this, 0 );
     recvThread = new RecvThread(client);
     recvThread->start();
     client->connect(false);
-
-
-    // Groupchat
-
-    joinRoom("Blastchat2", "conference.earthworkx.com", "steve");
-
-
-
-
-    vcardManager = new VCardManager(client);
 
     QSqlQuery update_blaster;
     update_blaster.exec("UPDATE users SET blaster = FALSE WHERE username='"+un+"'");
@@ -76,7 +74,7 @@ Dashboard::Dashboard(QWidget *parent, QString un, QString pw) :
     m_sigmapper->setMapping(ui->comboBox, un);
 
     connect(m_sigmapper, SIGNAL(mapped(QString)), this, SLOT(blast_selected(const QString&)));
-    connect(ui->sendMsgBtn, SIGNAL(clicked(bool)), this, SLOT(sendMessage()));
+    connect(ui->sendMsgBtn, SIGNAL(clicked(bool)), this, SLOT(sendBlastMessage()));
     // QObject::connect(ui->comboBox, SIGNAL(activated(int)), this, SLOT(blast_selected(username)));
 
 
@@ -89,12 +87,24 @@ Dashboard::~Dashboard()
     delete ui;
 }
 
-void Dashboard::sendMessage(){
+void Dashboard::sendBlastMessage(){
+    QString msg = ui->messageDraft->toPlainText().trimmed();
+    if(msg!=""){
+        string ptmsg = msg.toUtf8().constData();
+        m_room->send( ptmsg );
+        ui->messageDraft->clear();
+    }
+    else{
+        ui->messageDraft->clear();
+    }
+
+}
+
+void Dashboard::sendPrivateMessage(){
     QString msg = ui->messageDraft->toPlainText().trimmed();
     if(msg!=""){
         string ptmsg = msg.toUtf8().constData();
         Message msg_back(Message::Chat,gloox::JID("admin@earthworkx.com"), ptmsg);
-//        Message msg_back(Message::Chat,gloox::JID("Blastchat@conference.earthworkx.com/steve"), ptmsg);
         client->send( msg_back );
         QString username = QString::fromStdString(jid.username());
         ui->chatDialog->append("<b>"+username+"</b>: "+msg);
@@ -259,7 +269,10 @@ void Dashboard::onConnect()
 {
 //    ui->statusBar->showMessage("Logged in");
     qDebug() << "ConnListener::onConnect()" << endl;
-    vcardManager->fetchVCard(jid.bare(), this);
+//    vcardManager->fetchVCard(jid.bare(), this);
+    m_room->join();
+    m_room->getRoomInfo();
+    m_room->getRoomItems();
 }
 
 void Dashboard::onDisconnect(ConnectionError e)
@@ -375,33 +388,86 @@ void Dashboard::handleRosterError(const IQ &iq)
 
 // Group chat
 
-void GroupChat::handleMUCParticipantPresence( MUCRoom *room, const MUCRoomParticipant participant, const Presence &presence){}
-void GroupChat::handleMUCMessage(MUCRoom *room, const Message &msg, bool priv){
-
-    qDebug() << QString::fromStdString(msg.body());
-}
-
-bool GroupChat::handleMUCRoomCreation(MUCRoom *room){}
-void GroupChat::handleMUCSubject(MUCRoom *room, const std::string &nick, const std::string &subject){}
-void GroupChat::handleMUCInviteDecline(MUCRoom *room, const JID &invitee, const std::string &reason){}
-void GroupChat::handleMUCError(MUCRoom *room, StanzaError error){
-
-}
-void GroupChat::handleMUCInfo(MUCRoom *room, int features, const std::string &name, const DataForm *infoForm){}
-void GroupChat::handleMUCItems(MUCRoom *room, const Disco::ItemList &items){}
-
-
-
-void Dashboard::joinRoom( const std::string& myroom, const std::string& service,
-                             const std::string& nick )
+void Dashboard::handleMUCParticipantPresence( MUCRoom * /*room*/, const MUCRoomParticipant participant,
+                                        const Presence& presence )
 {
-    cout << "JOINING ROOM\n";
-  GroupChat* myHandler = new GroupChat();
-  JID roomJID( myroom + "@" + service + "/" + nick );
-  room = new MUCRoom( client, roomJID, myHandler, 0 );
-  room->join();
-
-  cout << room->affiliation();
-
-  cout << "DONE JOINING ROOM\n";
+  if( presence.presence() == Presence::Available )
+    printf( "!!!!!!!!!!!!!!!! %s is in the room, too\n", participant.nick->resource().c_str() );
+  else if( presence.presence() == Presence::Unavailable )
+    printf( "!!!!!!!!!!!!!!!! %s left the room\n", participant.nick->resource().c_str() );
+  else
+    printf( "Presence is %d of %s\n", presence.presence(), participant.nick->resource().c_str() );
 }
+
+void Dashboard::handleMUCMessage( MUCRoom* /*room*/, const Message& msg, bool priv )
+{
+  printf( "%s said: '%s' (history: %s, private: %s)\n", msg.from().resource().c_str(), msg.body().c_str(),
+          msg.when() ? "yes" : "no", priv ? "yes" : "no" );
+
+  bool old = (msg.when() ? "yes" : "no") == "yes";
+
+  if(msg.body() != "" && old == 0){
+      QString body = QString::fromStdString(msg.body().c_str());
+      QString sender = QString::fromStdString(msg.from().resource().c_str());
+//      QString time = QString::fromStdString(msg.when()->stamp());
+//      ui->chatDialog->append("<b>["+time+"]"+sender+"</b>: "+body);
+      ui->chatDialog->append("<b>"+sender+"</b>: "+body);
+  }
+
+}
+
+void Dashboard::handleMUCSubject( MUCRoom * /*room*/, const std::string& nick, const std::string& subject )
+{
+  if( nick.empty() )
+    printf( "Subject: %s\n", subject.c_str() );
+  else
+    printf( "%s has set the subject to: '%s'\n", nick.c_str(), subject.c_str() );
+}
+
+void Dashboard::handleMUCError( MUCRoom * /*room*/, StanzaError error )
+{
+  printf( "!!!!!!!!got an error: %d", error );
+}
+
+void Dashboard::handleMUCInfo( MUCRoom * /*room*/, int features, const std::string& name,
+                                const DataForm* infoForm )
+{
+  printf( "features: %d, name: %s, form xml: %s\n",
+          features, name.c_str(), infoForm->tag()->xml().c_str() );
+}
+
+void Dashboard::handleMUCItems( MUCRoom * /*room*/, const Disco::ItemList& items )
+{
+  Disco::ItemList::const_iterator it = items.begin();
+  for( ; it != items.end(); ++it )
+  {
+    printf( "%s -- %s is an item here\n", (*it)->jid().full().c_str(), (*it)->name().c_str() );
+  }
+}
+
+void Dashboard::handleMUCInviteDecline( MUCRoom * /*room*/, const JID& invitee, const std::string& reason )
+{
+  printf( "Invitee %s declined invitation. reason given: %s\n", invitee.full().c_str(), reason.c_str() );
+}
+
+bool Dashboard::handleMUCRoomCreation( MUCRoom *room )
+{
+  printf( "room %s didn't exist, beeing created.\n", room->name().c_str() );
+  return true;
+}
+
+
+
+//void Dashboard::joinRoom( const std::string& myroom, const std::string& service,
+//                             const std::string& nick )
+//{
+//    cout << "JOINING ROOM\n";
+//  GroupChat* myHandler = new GroupChat();
+//  JID roomJID( myroom + "@" + service + "/" + nick );
+//  room = new MUCRoom( client, roomJID, myHandler, 0 );
+//  room->join();
+
+//  cout << room->affiliation();
+
+//  cout << "DONE JOINING ROOM\n";
+//}
