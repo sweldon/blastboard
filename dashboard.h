@@ -25,6 +25,13 @@
 #include <gloox/messagehandler.h>
 #include <gloox/message.h>
 
+// Group chat
+#include <gloox/mucroom.h>
+//#include <gloox/mucroomconfighandler.h>
+#include <gloox/mucroomhandler.h>
+//#include <gloox/clientbase.h>
+
+
 namespace Ui {
 class Dashboard;
 }
@@ -63,6 +70,24 @@ private:
     bool running{false};
 };
 
+
+class GroupChat : public MUCRoomHandler{
+
+private:
+
+
+    virtual void handleMUCParticipantPresence(MUCRoom *room, const MUCRoomParticipant participant, const Presence &presence);
+    virtual void handleMUCMessage(MUCRoom *room, const Message &msg, bool priv);
+    virtual bool handleMUCRoomCreation(MUCRoom *room);
+    virtual void handleMUCSubject(MUCRoom *room, const std::string &nick, const std::string &subject);
+    virtual void handleMUCInviteDecline(MUCRoom *room, const JID &invitee, const std::string &reason);
+    virtual void handleMUCError(MUCRoom *room, StanzaError error);
+    virtual void handleMUCInfo(MUCRoom *room, int features, const std::string &name, const DataForm *infoForm);
+    virtual void handleMUCItems(MUCRoom *room, const Disco::ItemList &items);
+
+
+};
+
 class Dashboard : public QMainWindow, public ConnectionListener, public VCardHandler, public LogHandler, public RosterListener, public MessageHandler
 {
     Q_OBJECT
@@ -72,6 +97,8 @@ public:
     ~Dashboard();
 
     QSqlDatabase sqldb;
+
+
 
     void connClose(){
 
@@ -93,6 +120,8 @@ public:
 
         return ok;
     }
+
+    MUCRoom* room;
     void handleItemAdded(const JID &jid);
     void handleItemSubscribed(const JID &jid);
     void handleItemRemoved(const JID &jid);
@@ -123,8 +152,7 @@ private:
     virtual void handleLog( LogLevel level, LogArea area, const std::string& message );
     virtual void handleVCard( const JID& jid, const VCard *v );
 
-    virtual void handleVCardResult( VCardContext context, const JID& jid,
-                                    StanzaError se = StanzaErrorUndefined  );
+    virtual void handleVCardResult( VCardContext context, const JID& jid, StanzaError se = StanzaErrorUndefined  );
     virtual void handleMessage( const Message& stanza, MessageSession* session);
 
     void insertFriend(QString friendJid);
@@ -133,10 +161,16 @@ private:
     RecvThread *recvThread;
     VCardManager *vcardManager;
 
+    // Group chat
+
+    void joinRoom( const std::string& room, const std::string& service, const std::string& nick );
+
+
 
 private slots:
     void blast_selected(QString username);
     void sendMessage();
+//    void joinRoom( const std::string& room, const std::string& service, const std::string& nick );
 
 
 };

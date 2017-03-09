@@ -6,7 +6,7 @@
 #include <QGraphicsEllipseItem>
 #include <QDebug>
 #include <QtSql>
-#include <gloox/messagehandler.h>
+
 
 Dashboard::Dashboard(QWidget *parent, QString un, QString pw) :
     QMainWindow(parent),
@@ -38,6 +38,14 @@ Dashboard::Dashboard(QWidget *parent, QString un, QString pw) :
     recvThread = new RecvThread(client);
     recvThread->start();
     client->connect(false);
+
+
+    // Groupchat
+
+    joinRoom("Blastchat2", "conference.earthworkx.com", "steve");
+
+
+
 
     vcardManager = new VCardManager(client);
 
@@ -71,7 +79,6 @@ Dashboard::Dashboard(QWidget *parent, QString un, QString pw) :
     connect(ui->sendMsgBtn, SIGNAL(clicked(bool)), this, SLOT(sendMessage()));
     // QObject::connect(ui->comboBox, SIGNAL(activated(int)), this, SLOT(blast_selected(username)));
 
-    connect(ui->sendMsgBtn, SIGNAL(returnPressed()),this,SIGNAL(clicked()));
 
 
 }
@@ -87,6 +94,7 @@ void Dashboard::sendMessage(){
     if(msg!=""){
         string ptmsg = msg.toUtf8().constData();
         Message msg_back(Message::Chat,gloox::JID("admin@earthworkx.com"), ptmsg);
+//        Message msg_back(Message::Chat,gloox::JID("Blastchat@conference.earthworkx.com/steve"), ptmsg);
         client->send( msg_back );
         QString username = QString::fromStdString(jid.username());
         ui->chatDialog->append("<b>"+username+"</b>: "+msg);
@@ -363,4 +371,37 @@ void Dashboard::handleNonrosterPresence(const Presence &presence)
 
 void Dashboard::handleRosterError(const IQ &iq)
 {
+}
+
+// Group chat
+
+void GroupChat::handleMUCParticipantPresence( MUCRoom *room, const MUCRoomParticipant participant, const Presence &presence){}
+void GroupChat::handleMUCMessage(MUCRoom *room, const Message &msg, bool priv){
+
+    qDebug() << QString::fromStdString(msg.body());
+}
+
+bool GroupChat::handleMUCRoomCreation(MUCRoom *room){}
+void GroupChat::handleMUCSubject(MUCRoom *room, const std::string &nick, const std::string &subject){}
+void GroupChat::handleMUCInviteDecline(MUCRoom *room, const JID &invitee, const std::string &reason){}
+void GroupChat::handleMUCError(MUCRoom *room, StanzaError error){
+
+}
+void GroupChat::handleMUCInfo(MUCRoom *room, int features, const std::string &name, const DataForm *infoForm){}
+void GroupChat::handleMUCItems(MUCRoom *room, const Disco::ItemList &items){}
+
+
+
+void Dashboard::joinRoom( const std::string& myroom, const std::string& service,
+                             const std::string& nick )
+{
+    cout << "JOINING ROOM\n";
+  GroupChat* myHandler = new GroupChat();
+  JID roomJID( myroom + "@" + service + "/" + nick );
+  room = new MUCRoom( client, roomJID, myHandler, 0 );
+  room->join();
+
+  cout << room->affiliation();
+
+  cout << "DONE JOINING ROOM\n";
 }
