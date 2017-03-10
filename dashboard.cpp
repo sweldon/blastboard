@@ -6,6 +6,7 @@
 #include <QGraphicsEllipseItem>
 #include <QDebug>
 #include <QtSql>
+#include <time.h>
 
 
 Dashboard::Dashboard(QWidget *parent, QString un, QString pw) :
@@ -21,6 +22,8 @@ Dashboard::Dashboard(QWidget *parent, QString un, QString pw) :
     this->setFixedSize(QSize(1250, 750));
 
     ui->chatDialog->setText("<p><i>-You have entered the blastboard chat</i></p>");
+
+    ui->chatDialog->installEventFilter(this);
 
     scene = new QGraphicsScene(this);
 
@@ -75,6 +78,9 @@ Dashboard::Dashboard(QWidget *parent, QString un, QString pw) :
 
     connect(m_sigmapper, SIGNAL(mapped(QString)), this, SLOT(blast_selected(const QString&)));
     connect(ui->sendMsgBtn, SIGNAL(clicked(bool)), this, SLOT(sendBlastMessage()));
+    connect(ui->sendMsgBtn, SIGNAL(pressed()), this, SLOT(sendBtnPress()));
+    connect(ui->sendMsgBtn, SIGNAL(released()), this, SLOT(sendBtnRelease()));
+    connect(ui->messageDraft, SIGNAL(textChanged()), this, SLOT(textChanged()));
     // QObject::connect(ui->comboBox, SIGNAL(activated(int)), this, SLOT(blast_selected(username)));
 
 
@@ -87,7 +93,26 @@ Dashboard::~Dashboard()
     delete ui;
 }
 
+void Dashboard::textChanged(){
+    QString msg = ui->messageDraft->toPlainText().trimmed();
+    if(msg!=""){
+        ui->sendMsgBtn->setStyleSheet("background-color:#494a4a;border:none;");
+    }
+    else{
+        ui->sendMsgBtn->setStyleSheet("background-color:#2f3030; border:none;");
+    }
+
+}
+
+void Dashboard::sendBtnPress(){
+    ui->sendMsgBtn->setStyleSheet("background-color:#494a4a;border:none;");
+}
+void Dashboard::sendBtnRelease(){
+    ui->sendMsgBtn->setStyleSheet("background-color:#2f3030; border:none;");
+}
+
 void Dashboard::sendBlastMessage(){
+
     QString msg = ui->messageDraft->toPlainText().trimmed();
     if(msg!=""){
         string ptmsg = msg.toUtf8().constData();
@@ -406,12 +431,14 @@ void Dashboard::handleMUCMessage( MUCRoom* /*room*/, const Message& msg, bool pr
 
   bool old = (msg.when() ? "yes" : "no") == "yes";
 
-  if(msg.body() != "" && old == 0){
-      QString body = QString::fromStdString(msg.body().c_str());
-      QString sender = QString::fromStdString(msg.from().resource().c_str());
-//      QString time = QString::fromStdString(msg.when()->stamp());
-//      ui->chatDialog->append("<b>["+time+"]"+sender+"</b>: "+body);
-      ui->chatDialog->append("<b>"+sender+"</b>: "+body);
+
+  if(msg.body() != "" && old ==0){
+    QString body = QString::fromStdString(msg.body().c_str());
+    QString sender = QString::fromStdString(msg.from().resource().c_str());
+    // only retrievable if old == 1:
+    // QString time = QString::fromStdString(msg.when()->stamp());
+
+    ui->chatDialog->append("<b>"+sender+"</b>: "+body);
   }
 
 }
@@ -438,6 +465,7 @@ void Dashboard::handleMUCInfo( MUCRoom * /*room*/, int features, const std::stri
 
 void Dashboard::handleMUCItems( MUCRoom * /*room*/, const Disco::ItemList& items )
 {
+    // show users online
   Disco::ItemList::const_iterator it = items.begin();
   for( ; it != items.end(); ++it )
   {
@@ -457,17 +485,11 @@ bool Dashboard::handleMUCRoomCreation( MUCRoom *room )
 }
 
 
-
-//void Dashboard::joinRoom( const std::string& myroom, const std::string& service,
-//                             const std::string& nick )
+//void Dashboard::keyPressEvent(QKeyEvent *event)
 //{
-//    cout << "JOINING ROOM\n";
-//  GroupChat* myHandler = new GroupChat();
-//  JID roomJID( myroom + "@" + service + "/" + nick );
-//  room = new MUCRoom( client, roomJID, myHandler, 0 );
-//  room->join();
+//    qDebug() << event->key() << "\t" << Qt::Key_Enter << "\t" << QKeyEvent::Enter;
+//    if( event->key() == Qt::Key_Return)
+//        sendBlastMessage();
 
-//  cout << room->affiliation();
 
-//  cout << "DONE JOINING ROOM\n";
 //}

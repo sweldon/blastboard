@@ -27,10 +27,13 @@
 
 // Group chat
 #include <gloox/mucroom.h>
-//#include <gloox/mucroomconfighandler.h>
 #include <gloox/mucroomhandler.h>
-//#include <gloox/clientbase.h>
+#include <QEvent>
+#include <QKeyEvent>
 
+#ifdef WIN32
+#include <windows.h>
+#endif
 
 namespace Ui {
 class Dashboard;
@@ -71,23 +74,6 @@ private:
 };
 
 
-//class GroupChat : public MUCRoomHandler{
-
-//private:
-
-
-//    virtual void handleMUCParticipantPresence(MUCRoom *room, const MUCRoomParticipant participant, const Presence &presence);
-//    virtual void handleMUCMessage(MUCRoom *room, const Message &msg, bool priv);
-//    virtual bool handleMUCRoomCreation(MUCRoom *room);
-//    virtual void handleMUCSubject(MUCRoom *room, const std::string &nick, const std::string &subject);
-//    virtual void handleMUCInviteDecline(MUCRoom *room, const JID &invitee, const std::string &reason);
-//    virtual void handleMUCError(MUCRoom *room, StanzaError error);
-//    virtual void handleMUCInfo(MUCRoom *room, int features, const std::string &name, const DataForm *infoForm);
-//    virtual void handleMUCItems(MUCRoom *room, const Disco::ItemList &items);
-
-
-//};
-
 class Dashboard : public QMainWindow, ConnectionListener, VCardHandler, LogHandler, RosterListener, MessageHandler, MUCRoomHandler
 {
     Q_OBJECT
@@ -97,8 +83,6 @@ public:
     ~Dashboard();
 
     QSqlDatabase sqldb;
-
-
 
     void connClose(){
 
@@ -134,6 +118,8 @@ public:
     bool handleUnsubscriptionRequest(const JID &jid, const string &msg);
     void handleNonrosterPresence(const Presence &presence);
     void handleRosterError(const IQ &iq);
+//    void keyPressEvent(QKeyEvent *event);
+
 
 private:
     Ui::Dashboard *ui;
@@ -142,7 +128,6 @@ private:
     QProgressBar *pgbar;
     QTableWidget *vTable;
     QLabel *connection_error;
-
 
     virtual void onConnect();
     virtual void onDisconnect(ConnectionError e);
@@ -184,6 +169,9 @@ private slots:
     void blast_selected(QString username);
     void sendPrivateMessage();
     void sendBlastMessage();
+    void sendBtnPress();
+    void sendBtnRelease();
+    void textChanged();
 //    void joinRoom( const std::string& room, const std::string& service, const std::string& nick );
 
 
