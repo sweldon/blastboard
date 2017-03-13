@@ -6,8 +6,9 @@
 #include <QGraphicsEllipseItem>
 #include <QDebug>
 #include <QtSql>
-#include <time.h>
+#include <ctime>
 
+using namespace std;
 
 Dashboard::Dashboard(QWidget *parent, QString un, QString pw) :
     QMainWindow(parent),
@@ -22,8 +23,6 @@ Dashboard::Dashboard(QWidget *parent, QString un, QString pw) :
     this->setFixedSize(QSize(1250, 750));
 
     ui->chatDialog->setText("<p><i>-You have entered the blastboard chat</i></p>");
-
-    ui->chatDialog->installEventFilter(this);
 
     scene = new QGraphicsScene(this);
 
@@ -438,9 +437,29 @@ void Dashboard::handleMUCMessage( MUCRoom* /*room*/, const Message& msg, bool pr
     // only retrievable if old == 1:
     // QString time = QString::fromStdString(msg.when()->stamp());
 
-    ui->chatDialog->append("<b>"+sender+"</b>: "+body);
+   QString timestamp = QString::fromStdString(getCurrentTime());
+
+    ui->chatDialog->append(timestamp+" - <b>"+sender+"</b>: "+body);
   }
 
+}
+
+string Dashboard::getCurrentTime(){
+    time_t t = time(0);   // get time now
+    struct tm * now = localtime( & t );
+    int hour = now->tm_hour;
+    bool pm_flag = false;
+    if(hour > 12){
+        hour -= 12;
+        pm_flag = true;
+    }
+    std::string timestamp = std::to_string(hour)+":"+std::to_string(now->tm_min);
+    if(pm_flag){
+        timestamp += " PM";
+    }else{
+        timestamp += " AM";
+    }
+    return timestamp;
 }
 
 void Dashboard::handleMUCSubject( MUCRoom * /*room*/, const std::string& nick, const std::string& subject )

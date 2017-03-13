@@ -105,7 +105,7 @@ public:
         return ok;
     }
 
-
+    string getCurrentTime();
     void handleItemAdded(const JID &jid);
     void handleItemSubscribed(const JID &jid);
     void handleItemRemoved(const JID &jid);
