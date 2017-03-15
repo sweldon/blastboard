@@ -13,6 +13,24 @@
 #include <QThread>
 #include <QObject>
 
+
+
+
+#ifdef WIN32
+#include <C:\Users\Steve\Downloads\gloox\src\client.h>
+#include <C:\Users\Steve\Downloads\gloox\src\connectionlistener.h>
+#include <C:\Users\Steve\Downloads\gloox\src\connectiontls.h>
+#include <C:\Users\Steve\Downloads\gloox\src\connectiontcpclient.h>
+#include <C:\Users\Steve\Downloads\gloox\src\vcardhandler.h>
+#include <C:\Users\Steve\Downloads\gloox\src\vcardmanager.h>
+#include <C:\Users\Steve\Downloads\gloox\src\rosterlistener.h>
+#include <C:\Users\Steve\Downloads\gloox\src\rostermanager.h>
+#include <C:\Users\Steve\Downloads\gloox\src\vcard.h>
+#include <C:\Users\Steve\Downloads\gloox\src\messagehandler.h>
+#include <C:\Users\Steve\Downloads\gloox\src\message.h>
+#include <C:\Users\Steve\Downloads\gloox\src\mucroom.h>
+#include <C:\Users\Steve\Downloads\gloox\src\mucroomhandler.h>
+#else
 #include <gloox/client.h>
 #include <gloox/connectionlistener.h>
 #include <gloox/connectiontls.h>
@@ -24,10 +42,11 @@
 #include <gloox/vcard.h>
 #include <gloox/messagehandler.h>
 #include <gloox/message.h>
-
 // Group chat
 #include <gloox/mucroom.h>
 #include <gloox/mucroomhandler.h>
+#endif
+
 #include <QEvent>
 #include <QKeyEvent>
 
