@@ -448,12 +448,20 @@ string Dashboard::getCurrentTime(){
     time_t t = time(0);   // get time now
     struct tm * now = localtime( & t );
     int hour = now->tm_hour;
+    int min = now->tm_min;
+
     bool pm_flag = false;
     if(hour > 12){
         hour -= 12;
         pm_flag = true;
     }
-    std::string timestamp = std::to_string(hour)+":"+std::to_string(now->tm_min);
+    std::string str_min = std::to_string(min);
+    if(min < 10){
+        str_min.insert(0, "0");
+    }
+
+    std::string timestamp = std::to_string(hour)+":"+str_min;
+
     if(pm_flag){
         timestamp += " PM";
     }else{
