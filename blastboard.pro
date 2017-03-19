@@ -49,8 +49,5 @@ win32:DEPENDPATH += $$PWD/../../Downloads/gloox/src/.libs
 win32:!win32-g++: PRE_TARGETDEPS += $$PWD/../../Downloads/gloox/src/.libs/gloox.lib
 else:win32-g++: PRE_TARGETDEPS += $$PWD/../../Downloads/gloox/src/.libs/libgloox.a
 
-win32:CONFIG(release, debug|release): LIBS += -L$$PWD/'../../../../Program Files (x86)/PostgreSQL/9.6/lib/' -llibpq
-else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/'../../../../Program Files (x86)/PostgreSQL/9.6/lib/' -llibpqd
-
 win32:INCLUDEPATH += $$PWD/'../../../../Program Files (x86)/PostgreSQL/9.6/include'
 win32:DEPENDPATH += $$PWD/'../../../../Program Files (x86)/PostgreSQL/9.6/include'
