@@ -40,6 +40,7 @@ Login::Login(QWidget *parent) : QWidget(parent){
     submit_login->setStyleSheet("QPushButton{background: none; background-color:#98B2BD; height: 5px; color: #ffffff; font-size:16pt; font-family:'Arial'; border-radius:2px;} QPushButton:hover{background-color:#798e97;}");
 
     QObject::connect(submit_login, SIGNAL(clicked(bool)), this, SLOT(on_login_clicked()));
+    QObject::connect(pass_field, SIGNAL(returnPressed()), this, SLOT(on_login_clicked()));
 
     this->setWindowTitle("Blastboard - Login");
 

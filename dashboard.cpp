@@ -7,7 +7,7 @@
 #include <QDebug>
 #include <QtSql>
 #include <ctime>
-#include <QTextCursor>
+
 
 using namespace std;
 
@@ -64,6 +64,7 @@ Dashboard::Dashboard(QWidget *parent, QString un, QString pw) :
     int avatarW = 80;
     int avatarH = 80;
 
+
     avatar = scene->addEllipse(0,0,avatarW,avatarH, pen, QBrush(m.scaled(avatarW,avatarH,Qt::IgnoreAspectRatio,Qt::SmoothTransformation)));
 
     if(ui->progressBar->value() == 0) {
@@ -81,11 +82,13 @@ Dashboard::Dashboard(QWidget *parent, QString un, QString pw) :
     connect(ui->sendMsgBtn, SIGNAL(pressed()), this, SLOT(sendBtnPress()));
     connect(ui->sendMsgBtn, SIGNAL(released()), this, SLOT(sendBtnRelease()));
     connect(ui->messageDraft, SIGNAL(textChanged()), this, SLOT(textChanged()));
+
     // QObject::connect(ui->comboBox, SIGNAL(activated(int)), this, SLOT(blast_selected(username)));
 
 
 
 }
+
 
 Dashboard::~Dashboard()
 {
@@ -117,10 +120,10 @@ void Dashboard::sendBlastMessage(){
     if(msg!=""){
         string ptmsg = msg.toUtf8().constData();
         m_room->send( ptmsg );
-        ui->messageDraft->clear();
+        ui->messageDraft->setText("");
     }
     else{
-        ui->messageDraft->clear();
+        ui->messageDraft->setText("");
     }
 
 }
@@ -428,9 +431,9 @@ void Dashboard::handleMUCParticipantPresence( MUCRoom * /*room*/, const MUCRoomP
                                         const Presence& presence )
 {
   if( presence.presence() == Presence::Available )
-    printf( "!!!!!!!!!!!!!!!! %s is in the room, too\n", participant.nick->resource().c_str() );
+    printf( "%s is in the room, too\n", participant.nick->resource().c_str() );
   else if( presence.presence() == Presence::Unavailable )
-    printf( "!!!!!!!!!!!!!!!! %s left the room\n", participant.nick->resource().c_str() );
+    printf( " %s left the room\n", participant.nick->resource().c_str() );
   else
     printf( "Presence is %d of %s\n", presence.presence(), participant.nick->resource().c_str() );
 }
@@ -453,9 +456,7 @@ void Dashboard::handleMUCMessage( MUCRoom* /*room*/, const Message& msg, bool pr
 
     ui->chatDialog->append(timestamp+" - <b>"+sender+"</b>: "+body);
 
-//    QTextCursor c = ui->chatDialog->textCursor();
-//    c.movePosition(QTextCursor::End);
-//    ui->chatDialog->setTextCursor(c);
+
   }
 
 
@@ -528,17 +529,3 @@ bool Dashboard::handleMUCRoomCreation( MUCRoom *room )
   printf( "room %s didn't exist, beeing created.\n", room->name().c_str() );
   return true;
 }
-//void chatBoxHandler::keyPressEvent(QKeyEvent *event)
-//{
-//    if( event->key() == Qt::Key_Return){
-
-//        qDebug() << "pressed enter! send a message";
-//        qDebug() << this->parent();
-//    }else{
-//        QTextEdit::keyPressEvent( event );
-//    }
-
-
-//}
-
-

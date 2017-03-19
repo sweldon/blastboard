@@ -13,6 +13,7 @@
 #include <QThread>
 #include <QObject>
 #include <QTextEdit>
+#include <chatboxhandler.h>
 
 
 #ifdef WIN32
@@ -138,7 +139,6 @@ public:
     bool handleUnsubscriptionRequest(const JID &jid, const string &msg);
     void handleNonrosterPresence(const Presence &presence);
     void handleRosterError(const IQ &iq);
-//    void keyPressEvent(QKeyEvent *event);
 
 
 
@@ -179,6 +179,7 @@ private:
     RecvThread *recvThread;
     VCardManager *vcardManager;
     MUCRoom* m_room;
+
 
 
     // Group chat
