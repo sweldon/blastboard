@@ -14,11 +14,13 @@ QMAKE_CXXFLAGS += -std=c++11
 SOURCES += \
     main.cpp \
     login.cpp \
-    dashboard.cpp
+    dashboard.cpp \
+    chatboxhandler.cpp
 
 HEADERS += \
     login.h \
-    dashboard.h
+    dashboard.h \
+    chatboxhandler.h
 
 RESOURCES     = resources.qrc
 

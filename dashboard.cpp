@@ -7,6 +7,7 @@
 #include <QDebug>
 #include <QtSql>
 #include <ctime>
+#include <QTextCursor>
 
 using namespace std;
 
@@ -169,6 +170,17 @@ void Dashboard::blast_selected(QString username){
                         currentStatus += 20;
                         pgbar->setValue(currentStatus);
                         ui->listWidget->addItem(new QListWidgetItem(QIcon(":/assets/avatar_sample.png"),username));
+                        ui->statusList->addItem(status);
+
+
+                        ui->listWidget->addItem(new QListWidgetItem(QIcon(":/assets/avatar_sample.png"),username));
+                        ui->statusList->addItem(status);
+                        ui->listWidget->addItem(new QListWidgetItem(QIcon(":/assets/avatar_sample.png"),username));
+                        ui->statusList->addItem(status);
+                        ui->listWidget->addItem(new QListWidgetItem(QIcon(":/assets/avatar_sample.png"),username));
+                        ui->statusList->addItem(status);
+                        ui->listWidget->addItem(new QListWidgetItem(QIcon(":/assets/avatar_sample.png"),username));
+                        ui->statusList->addItem(status);
                         ui->statusList->addItem(status);
 
                         if(currentStatus == 100){
@@ -440,7 +452,13 @@ void Dashboard::handleMUCMessage( MUCRoom* /*room*/, const Message& msg, bool pr
    QString timestamp = QString::fromStdString(getCurrentTime());
 
     ui->chatDialog->append(timestamp+" - <b>"+sender+"</b>: "+body);
+
+//    QTextCursor c = ui->chatDialog->textCursor();
+//    c.movePosition(QTextCursor::End);
+//    ui->chatDialog->setTextCursor(c);
   }
+
+
 
 }
 
@@ -510,13 +528,17 @@ bool Dashboard::handleMUCRoomCreation( MUCRoom *room )
   printf( "room %s didn't exist, beeing created.\n", room->name().c_str() );
   return true;
 }
-
-
-//void Dashboard::keyPressEvent(QKeyEvent *event)
+//void chatBoxHandler::keyPressEvent(QKeyEvent *event)
 //{
-//    qDebug() << event->key() << "\t" << Qt::Key_Enter << "\t" << QKeyEvent::Enter;
-//    if( event->key() == Qt::Key_Return)
-//        sendBlastMessage();
+//    if( event->key() == Qt::Key_Return){
+
+//        qDebug() << "pressed enter! send a message";
+//        qDebug() << this->parent();
+//    }else{
+//        QTextEdit::keyPressEvent( event );
+//    }
 
 
 //}
+
+

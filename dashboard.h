@@ -12,8 +12,7 @@
 #include <string>
 #include <QThread>
 #include <QObject>
-
-
+#include <QTextEdit>
 
 
 #ifdef WIN32
@@ -46,7 +45,7 @@
 #include <gloox/mucroom.h>
 #include <gloox/mucroomhandler.h>
 #endif
-
+#include <QTextEdit>
 #include <QEvent>
 #include <QKeyEvent>
 
@@ -60,6 +59,8 @@ class Dashboard;
 
 using namespace gloox;
 using namespace std;
+
+
 
 class RecvThread : public QThread
 {
@@ -140,6 +141,7 @@ public:
 //    void keyPressEvent(QKeyEvent *event);
 
 
+
 private:
     Ui::Dashboard *ui;
     QGraphicsScene *scene;
@@ -178,16 +180,18 @@ private:
     VCardManager *vcardManager;
     MUCRoom* m_room;
 
+
     // Group chat
 
 //    void joinRoom( const std::string& room, const std::string& service, const std::string& nick );
 
 
-
+public slots:
+    void sendBlastMessage();
 private slots:
     void blast_selected(QString username);
     void sendPrivateMessage();
-    void sendBlastMessage();
+
     void sendBtnPress();
     void sendBtnRelease();
     void textChanged();
@@ -195,5 +199,7 @@ private slots:
 
 
 };
+
+
 
 #endif // DASHBOARD_H
