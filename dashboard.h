@@ -143,12 +143,21 @@ public:
 
 
 private:
+
+    // change these to be on the top bar widget only
+    void mousePressEvent(QMouseEvent *event);
+    void mouseMoveEvent(QMouseEvent *event);
+    int m_nMouseClick_X_Coordinate;
+    int m_nMouseClick_Y_Coordinate;
+    //
+
     Ui::Dashboard *ui;
     QGraphicsScene *scene;
     QGraphicsEllipseItem *avatar;
     QProgressBar *pgbar;
     QTableWidget *vTable;
     QLabel *connection_error;
+
 
     virtual void onConnect();
     virtual void onDisconnect(ConnectionError e);

@@ -7,6 +7,9 @@
 #include <QDebug>
 #include <QtSql>
 #include <ctime>
+#include <QToolBar>
+#include <QStyle>
+#include <QDesktopWidget>
 
 
 using namespace std;
@@ -15,6 +18,12 @@ Dashboard::Dashboard(QWidget *parent, QString un, QString pw) :
     QMainWindow(parent),
     ui(new Ui::Dashboard)
 {
+
+    this->setWindowFlags(Qt::FramelessWindowHint);
+
+    this->statusBar()->setVisible(false);
+
+
 
     std::string username = un.toUtf8().constData();
     std::string password = pw.toUtf8().constData();
@@ -529,3 +538,14 @@ bool Dashboard::handleMUCRoomCreation( MUCRoom *room )
   printf( "room %s didn't exist, beeing created.\n", room->name().c_str() );
   return true;
 }
+
+// change these to be on the top bar widget only
+void Dashboard::mousePressEvent(QMouseEvent *event) {
+m_nMouseClick_X_Coordinate = event->x();
+m_nMouseClick_Y_Coordinate = event->y();
+}
+
+void Dashboard::mouseMoveEvent(QMouseEvent *event) {
+move(event->globalX()-m_nMouseClick_X_Coordinate,event->globalY()-m_nMouseClick_Y_Coordinate);
+}
+//

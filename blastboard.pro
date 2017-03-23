@@ -28,7 +28,8 @@ HEADERS += \
 RESOURCES     = resources.qrc
 
 FORMS += \
-    dashboard.ui
+    dashboard.ui \
+    login.ui
 
 DISTFILES += \
     ../Desktop/backups/Screen Shot 2016-12-05 at 1.39.01 PM.png
