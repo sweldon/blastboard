@@ -18,12 +18,14 @@ SOURCES += \
     main.cpp \
     login.cpp \
     dashboard.cpp \
-    chatboxhandler.cpp
+    chatboxhandler.cpp \
+    toolbar.cpp
 
 HEADERS += \
     login.h \
     dashboard.h \
-    chatboxhandler.h
+    chatboxhandler.h \
+    toolbar.h
 
 RESOURCES     = resources.qrc
 

@@ -145,10 +145,10 @@ public:
 private:
 
     // change these to be on the top bar widget only
-    void mousePressEvent(QMouseEvent *event);
-    void mouseMoveEvent(QMouseEvent *event);
-    int m_nMouseClick_X_Coordinate;
-    int m_nMouseClick_Y_Coordinate;
+//    void mousePressEvent(QMouseEvent *event);
+//    void mouseMoveEvent(QMouseEvent *event);
+//    int m_nMouseClick_X_Coordinate;
+//    int m_nMouseClick_Y_Coordinate;
     //
 
     Ui::Dashboard *ui;
@@ -205,11 +205,15 @@ private slots:
     void sendBtnPress();
     void sendBtnRelease();
     void textChanged();
+    void closeWindow();
+    void minimizeWindow();
+//    void expandWindow();
+
+
 //    void joinRoom( const std::string& room, const std::string& service, const std::string& nick );
 
 
 };
-
 
 
 #endif // DASHBOARD_H

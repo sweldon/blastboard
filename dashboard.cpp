@@ -92,6 +92,10 @@ Dashboard::Dashboard(QWidget *parent, QString un, QString pw) :
     connect(ui->sendMsgBtn, SIGNAL(released()), this, SLOT(sendBtnRelease()));
     connect(ui->messageDraft, SIGNAL(textChanged()), this, SLOT(textChanged()));
 
+    // toolbar
+
+    connect(ui->close_button, SIGNAL(clicked(bool)), this, SLOT(closeWindow()));
+    connect(ui->min_button, SIGNAL(clicked(bool)), this, SLOT(minimizeWindow()));
     // QObject::connect(ui->comboBox, SIGNAL(activated(int)), this, SLOT(blast_selected(username)));
 
 
@@ -104,6 +108,22 @@ Dashboard::~Dashboard()
     recvThread->stop();
     delete ui;
 }
+
+void Dashboard::closeWindow(){
+    QApplication::quit();
+}
+
+void Dashboard::minimizeWindow() {
+    this->setWindowState(Qt::WindowMinimized);
+}
+
+//void MainWindow::expandWindow(bool expand) {
+//if (expand)
+//this->setWindowState(Qt::WindowMaximized);
+//else { /// To fix this one, can't un-expand
+//// this->setWindowState(Qt::WindowModal);
+//}
+
 
 void Dashboard::textChanged(){
     QString msg = ui->messageDraft->toPlainText().trimmed();
@@ -539,13 +559,15 @@ bool Dashboard::handleMUCRoomCreation( MUCRoom *room )
   return true;
 }
 
-// change these to be on the top bar widget only
-void Dashboard::mousePressEvent(QMouseEvent *event) {
-m_nMouseClick_X_Coordinate = event->x();
-m_nMouseClick_Y_Coordinate = event->y();
-}
 
-void Dashboard::mouseMoveEvent(QMouseEvent *event) {
-move(event->globalX()-m_nMouseClick_X_Coordinate,event->globalY()-m_nMouseClick_Y_Coordinate);
-}
+
+// change these to be on the top bar widget only
+//void Dashboard::mousePressEvent(QMouseEvent *event) {
+//m_nMouseClick_X_Coordinate = event->x();
+//m_nMouseClick_Y_Coordinate = event->y();
+//}
+
+//void Dashboard::mouseMoveEvent(QMouseEvent *event) {
+//move(event->globalX()-m_nMouseClick_X_Coordinate,event->globalY()-m_nMouseClick_Y_Coordinate);
+//}
 //
