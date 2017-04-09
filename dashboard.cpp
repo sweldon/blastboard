@@ -204,17 +204,6 @@ void Dashboard::blast_selected(QString username){
                         ui->listWidget->addItem(new QListWidgetItem(QIcon(":/assets/avatar_sample.png"),username));
                         ui->statusList->addItem(status);
 
-
-                        ui->listWidget->addItem(new QListWidgetItem(QIcon(":/assets/avatar_sample.png"),username));
-                        ui->statusList->addItem(status);
-                        ui->listWidget->addItem(new QListWidgetItem(QIcon(":/assets/avatar_sample.png"),username));
-                        ui->statusList->addItem(status);
-                        ui->listWidget->addItem(new QListWidgetItem(QIcon(":/assets/avatar_sample.png"),username));
-                        ui->statusList->addItem(status);
-                        ui->listWidget->addItem(new QListWidgetItem(QIcon(":/assets/avatar_sample.png"),username));
-                        ui->statusList->addItem(status);
-                        ui->statusList->addItem(status);
-
                         if(currentStatus == 100){
                             pgbar->setStyleSheet("QProgressBar{ border: 2px solid grey;border-radius: 5px;text-align: center}QProgressBar::chunk {background-color: green;width: 10px;margin: 1px;}");
                             pgbar->setFormat("");

@@ -28,6 +28,7 @@ LoginUi::LoginUi(QWidget *parent) :
 
     ui->user_field->setPlaceholderText("Username");
     ui->pass_field->setPlaceholderText("Password");
+    ui->pass_field->setEchoMode(QLineEdit::Password);
 
     QObject::connect(ui->submit_login, SIGNAL(clicked(bool)), this, SLOT(on_login_clicked()));
     QObject::connect(ui->pass_field, SIGNAL(returnPressed()), this, SLOT(on_login_clicked()));

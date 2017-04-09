@@ -1335,7 +1335,7 @@ p, li { white-space: pre-wrap; }
      <rect>
       <x>20</x>
       <y>160</y>
-      <width>200</width>
+      <width>181</width>
       <height>240</height>
      </rect>
     </property>
@@ -1381,9 +1381,9 @@ p, li { white-space: pre-wrap; }
    <widget class="QListWidget" name="statusList">
     <property name="geometry">
      <rect>
-      <x>220</x>
+      <x>199</x>
       <y>160</y>
-      <width>100</width>
+      <width>121</width>
       <height>240</height>
      </rect>
     </property>
@@ -1495,7 +1495,7 @@ p, li { white-space: pre-wrap; }
       <string notr="true">color:#6996AD;</string>
      </property>
      <property name="text">
-      <string>Videoball</string>
+      <string>Voice</string>
      </property>
     </widget>
     <widget class="QLabel" name="label_4">

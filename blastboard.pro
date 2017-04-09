@@ -16,14 +16,12 @@ QT_DEBUG_PLUGINS=1
 
 SOURCES += \
     main.cpp \
-    login.cpp \
     dashboard.cpp \
     chatboxhandler.cpp \
     toolbar.cpp \
     loginui.cpp
 
 HEADERS += \
-    login.h \
     dashboard.h \
     chatboxhandler.h \
     toolbar.h \
@@ -33,7 +31,6 @@ RESOURCES     = resources.qrc
 
 FORMS += \
     dashboard.ui \
-    login.ui \
     loginui.ui
 
 DISTFILES += \
