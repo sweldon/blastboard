@@ -19,19 +19,22 @@ SOURCES += \
     login.cpp \
     dashboard.cpp \
     chatboxhandler.cpp \
-    toolbar.cpp
+    toolbar.cpp \
+    loginui.cpp
 
 HEADERS += \
     login.h \
     dashboard.h \
     chatboxhandler.h \
-    toolbar.h
+    toolbar.h \
+    loginui.h
 
 RESOURCES     = resources.qrc
 
 FORMS += \
     dashboard.ui \
-    login.ui
+    login.ui \
+    loginui.ui
 
 DISTFILES += \
     ../Desktop/backups/Screen Shot 2016-12-05 at 1.39.01 PM.png

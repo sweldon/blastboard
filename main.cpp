@@ -1,10 +1,11 @@
 #include <QApplication>
-#include "login.h"
+
+#include "loginui.h"
 
 int main(int argc, char **argv)
 {
     QApplication a(argc, argv);
-    Login w;
+    LoginUi w;
     w.show();
 
     return a.exec();

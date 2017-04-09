@@ -10,6 +10,10 @@
 #include "dashboard.h"
 #include <QLabel>
 
+namespace Ui {
+class Login;
+}
+
 class QPushButton;
 class QLineEdit;
 
@@ -57,6 +61,7 @@ private:
     QPushButton *submit_login;
     bool *ok;
     QLabel *connection_error;
+    Ui::Login *ui;
 
 
 };
