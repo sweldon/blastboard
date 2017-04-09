@@ -5,6 +5,7 @@
 #include <QPainter>
 #include <QPalette>
 #include <QMessageBox>
+#include <QSqlQuery>
 
 Login::Login(QWidget *parent) : QWidget(parent){
 

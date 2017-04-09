@@ -42,7 +42,7 @@
     <string notr="true">background: none; background-color: #ffffff; font-size:18pt; border-radius:2px; font-family:'Arial';</string>
    </property>
   </widget>
-  <widget class="QPushButton" name="pushButton">
+  <widget class="QPushButton" name="submit_login">
    <property name="geometry">
     <rect>
      <x>120</x>
@@ -89,56 +89,6 @@
     </property>
     <property name="text">
      <string>Videoball</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="close_button_2">
-    <property name="geometry">
-     <rect>
-      <x>1220</x>
-      <y>0</y>
-      <width>20</width>
-      <height>23</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <pointsize>14</pointsize>
-     </font>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">QPushButton:hover{color:#ffffff;}QPushButton{color:#7e7e7e;}</string>
-    </property>
-    <property name="text">
-     <string>x</string>
-    </property>
-    <property name="flat">
-     <bool>true</bool>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="min_button_2">
-    <property name="geometry">
-     <rect>
-      <x>1197</x>
-      <y>-6</y>
-      <width>23</width>
-      <height>31</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <pointsize>13</pointsize>
-      <weight>75</weight>
-      <bold>true</bold>
-     </font>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">QPushButton:hover{color:#ffffff;}QPushButton{color:#7e7e7e;}</string>
-    </property>
-    <property name="text">
-     <string>_</string>
-    </property>
-    <property name="flat">
-     <bool>true</bool>
     </property>
    </widget>
    <widget class="QPushButton" name="min_button">
